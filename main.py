@@ -43,7 +43,7 @@ async def generate_content(req: GenerationRequest):
                 "X-Title": "UA_ShopAI"
             },
             json={
-                "model": "qwen/qwen-2.5-7b-instruct:free",
+                "model": "qwen/qwen-2.5-7b-instruct",
                 "messages": [{"role": "user", "content": prompt}]
             }
         )
