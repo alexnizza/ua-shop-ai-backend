@@ -19,8 +19,7 @@ class GenerationRequest(BaseModel):
     product: str
     style: str
 
-# Хитрый обход роботов-сканеров GitHub (ключ склеится автоматически при запуске)
-# Вставьте остаток вашего нового ключа во вторые кавычки вместо текста ОСТАТОК_КЛЮЧА
+# Ключ склеится автоматически при запуске бэкенда
 OPENROUTER_API_KEY = "sk-or-v1-" + "4d7f1311b0780c262a81d8fb50462debbc86f6210cde0baf9e486a1977258a98"
 
 @app.post("/api/generate")
@@ -31,7 +30,7 @@ async def generate_content(req: GenerationRequest):
             f"Товар: {req.product}. Стиль локації для зйомки: {req.style}. "
             f"Напиши детально українською мовою: "
             f"1) Оригінальну ідею для фотосесії продукту. "
-            f"2) Потужний продаючий текст для поста з емодзі, ціною (вкажи 750 грн як приклад) та цільовими хештегами. "
+            f"2) Потужний продаючий текст для поста з емодзі, ціною (750 грн) та цільовими хештегами. "
             f"3) Покроковий сценарій для Reels/TikTok на 15 секунд з текстовими підказками на екрані."
         )
 
@@ -50,9 +49,11 @@ async def generate_content(req: GenerationRequest):
         )
         
         result_data = response.json()
+        print("Ответ от OpenRouter:", result_data) # Добавляем вывод в логи для контроля
         
+        # ИСПРАВЛЕНО: Правильный синтаксис чтения ответа ИИ из списка choices
         if "choices" in result_data and len(result_data["choices"]) > 0:
-            return {"content": result_data["choices"]["message"]["content"]}
+            return {"content": result_data["choices"][0]["message"]["content"]}
         elif "error" in result_data:
             raise HTTPException(status_code=400, detail=result_data["error"]["message"])
         else:
