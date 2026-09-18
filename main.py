@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Полностью разрешаем вашему сайту Netlify делать запросы
+# Дозволяємо сайту Netlify та будь-яким браузерам безпечно забирати відповіді
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,12 +25,12 @@ OPENROUTER_API_KEY = "sk-or-v1-e3d5e2b322da3ed71dcb3668686d04522463be3b8ab7560e6
 async def generate_content(req: GenerationRequest):
     try:
         prompt = (
-            f"Ти — професійний український маркетолог. Напиши контент для Instagram-магазину. "
-            f"Товар: {req.product}. Стиль зйомки: {req.style}. "
-            f"Напиши обов'язково українською мовою: "
-            f"1) Коротку ідею для фотосесії. "
-            f"2) Продаючий текст для поста з емодзі та хештегами. "
-            f"3) Покроковий сценарій для Shorts/Reels на 15 секунд."
+            f"Ти — професійний український маркетолог та Instagram-копірайтер. Напиши контент для магазину. "
+            f"Товар: {req.product}. Стиль локації для зйомки: {req.style}. "
+            f"Напиши детально українською мовою: "
+            f"1) Оригінальну ідею для фотосесії продукту. "
+            f"2) Потужний продаючий текст для поста з емодзі, ціною (вкажи 750 грн як приклад) та цільовими хештегами. "
+            f"3) Покроковий сценарій для Reels/TikTok на 15 секунд з текстовими підказками на екрані."
         )
 
         response = requests.post(
@@ -50,11 +50,11 @@ async def generate_content(req: GenerationRequest):
         result_data = response.json()
         
         if "choices" in result_data and len(result_data["choices"]) > 0:
-            return {"content": result_data["choices"][0]["message"]["content"]}
+            return {"content": result_data["choices"]["message"]["content"]}
         elif "error" in result_data:
             raise HTTPException(status_code=400, detail=result_data["error"]["message"])
         else:
-            raise HTTPException(status_code=500, detail="Невідома помилка сервера OpenRouter")
+            raise HTTPException(status_code=500, detail="Помилка відповіді від китайського ШІ")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
