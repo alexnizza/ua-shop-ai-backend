@@ -19,7 +19,7 @@ class GenerationRequest(BaseModel):
     product: str
     style: str
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "sk-or-v1-" + "4d7f1311b0780c262a81d8fb50462debbc86f6210cde0baf9e486a1977258a98"
 
 @app.post("/api/generate")
 async def generate_content(req: GenerationRequest):
