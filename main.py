@@ -20,7 +20,7 @@ class GenerationRequest(BaseModel):
     style: str
 
 # Ключ склеится автоматически при запуске бэкенда
-OPENROUTER_API_KEY = "OPENROUTER_API_KEY"
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
 @app.post("/api/generate")
 async def generate_content(req: GenerationRequest):
